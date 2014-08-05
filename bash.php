@@ -441,7 +441,7 @@ if(isset($_GET['pass'])){
 }elseif(empty($_GET)){
 	// Display Homepage
 
-	start_page($TheTitle.' - Home','<a href="http://www.screddit.eu/bash.php?chat">irc.quakenet.org #redditeu</a> & <a href="http://www.screddit.eu/bash.php?chat">#starcraft</a><br /><br />');
+	start_page($TheTitle.' - Home','<a href="http://www.screddit.eu/chat/">irc.quakenet.org #redditeu</a><br /><br />');
 
 	$getRand=mysql_query("SELECT * FROM bc_quotes WHERE active = 1 ORDER BY RAND() LIMIT 1");
 	$Rand=mysql_fetch_assoc($getRand);
@@ -520,9 +520,6 @@ echo smallMenu().'<div class="topMenu">
   '.$Approved.' quotes approved; '.$Pending.' quotes pending
   </div>
 .
-  <div class="right-element" style="font-size:11px">
- powered by <a href="http://www.seanbluestone.com/bash-org-clone-php-script-for-irc-quotes">bash.org clone irc quotes php script</a>
-  </div>
 
 </div>
 </body></html>';
