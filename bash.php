@@ -419,8 +419,12 @@ if(isset($_GET['pass'])){
 	}
 
 
+} elseif(isset($_GET['json'])){
 
-}elseif(isset($_GET['moderation'])){
+	$getAll=mysql_query("SELECT * FROM bc_quotes ORDER BY id") or die(mysql_error());
+	echo(json_encode($getAll));
+
+} elseif(isset($_GET['moderation'])) {
 
 	start_page($TheTitle.' - Quotes in Moderation');
 
