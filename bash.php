@@ -294,8 +294,6 @@ if (isset($_GET['pass'])){
 			$ip=$_SERVER['REMOTE_ADDR'];
 			$quote=mysql_real_escape_string(substr($_POST['quote'],0,9993000));
 
-// preg_match("/.*([<*-].*)$/", $quote, $m); $m[1];
-//preg_match("/^[^<*-]*([<*-].*)$/", $quote, $m); $m[1];
 			if ($_POST['strip']=='on'){
 				$quoteSplode=explode('\n',$quote);
 				foreach($quoteSplode as $Line => $Value){
