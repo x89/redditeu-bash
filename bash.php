@@ -195,14 +195,12 @@ function show_quote($Quote,$ShowTime=FALSE){
 	}
 
 	if($Quote){
-		echo '<div class="quote"><a href="?'.$Quote['id'].'">#'.$Quote['id'].'</a> <span class="score">('.$Quote['popularity'].')</span> '.($ShowTime!=FALSE ? date('jS/M/Y',$Quote['timestamp']) : '').' <a class="rox" href="?'.$Quote['id'].'&amp;v=rox">[+]</a><a class="sux" href="?'.$Quote['id'].'&amp;v=sux">[-]</a>'.$del.$approve.'<br/>'.nl2br(htmlspecialchars(stripslashes($Quote['quote']))).'</div>';
+		echo '<div class="quote"><a href="?'.$Quote['id'].'">#'.$Quote['id'].'</a> <span class="score">('.$Quote['popularity'].')</span> '.($ShowTime!=FALSE ? date('jS/M/Y',$Quote['timestamp']) : '').' <a class="rox" href="?'.$Quote['id'].'&amp;v=rox">[+]</a><a class="sux" href="?'.$Quote['id'].'&amp;v=sux">[-]</a>'.$del.$approve.'<br/><span class="quote-text">'.nl2br(htmlspecialchars(stripslashes($Quote['quote']))).'</span></div>';
 	}else{
 		echo 'Quote not found or doesn\'t exist yet.';
 	}
 
 }
-
-
 
 
 if(isset($_GET['pass'])){
@@ -268,7 +266,6 @@ if(isset($_GET['pass'])){
 	}else{
 		echo 'No results found homeslice.';
 	}
-
 
 
 }elseif(isset($_GET['search'])){
@@ -367,8 +364,6 @@ if(isset($_GET['pass'])){
 	</form>';
 
 
-
-
 }elseif(isset($_GET['approve'])){
 
 	if(isAdmin()){
@@ -404,8 +399,6 @@ if(isset($_GET['pass'])){
 		}
 	}
 
-
-
 }elseif(isset($_GET['latest'])){
 
 	start_page($TheTitle.' - Latest Quotes');
@@ -418,11 +411,11 @@ if(isset($_GET['pass'])){
 		}
 	}
 
-
 } elseif(isset($_GET['json'])){
 
 	$getAll=mysql_query("SELECT * FROM bc_quotes ORDER BY id") or die(mysql_error());
 	echo(json_encode($getAll));
+
 
 } elseif(isset($_GET['moderation'])) {
 
@@ -439,8 +432,6 @@ if(isset($_GET['pass'])){
 			echo 'No quotes awaiting moderation =(';
 		}
 	}
-
-
 
 }elseif(empty($_GET)){
 	// Display Homepage
@@ -504,8 +495,6 @@ if(isset($_GET['pass'])){
 		}
 	}
 }
-
-
 
 $countQuotes=mysql_query("SELECT COUNT(*) AS count FROM bc_quotes GROUP BY active ORDER BY active DESC");
 
