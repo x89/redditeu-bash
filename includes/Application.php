@@ -99,7 +99,7 @@ class Application
 			$result = $this->controller->showQuoteAction($this->getQuoteId($_GET));
 		}
 
-		echo $result;
+		$this->controller->sendResponse($result);
 	}
 
 	protected function getQuoteId($getParams)

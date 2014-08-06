@@ -3,6 +3,7 @@ class Controller
 {
 	protected $app;
 	protected $quotes;
+	protected $json = false;
 
 	public function __construct(Application $app, QuoteManager $quotes)
 	{
@@ -194,6 +195,7 @@ class Controller
 
 	public function jsonAction()
 	{
+		$this->json = true;
 		$quotes = $this->quotes->getAll();
 
 		return json_encode($quotes);
@@ -234,5 +236,16 @@ class Controller
 		}
 
 		return $this->app->template('single', ['quote' => $quote]);
+	}
+
+	public function sendResponse($body)
+	{
+		if ($this->json) {
+			header('Content-type: application/json');
+		} else {
+			header('Content-type: text/html; charset=utf-8');
+		}
+
+		echo $body;
 	}
 }
