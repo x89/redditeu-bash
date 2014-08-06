@@ -1,49 +1,44 @@
 body, html {
-	background: url('./shitbg.png');
-	background-size: 100% auto;
-	background-repeat: repeat; background-color:black;
-	font-family: courier new,lucida console,fixed;
+	font-family: Comic Sans MS;
+	font-size: 18px;
 }
 
-a:link {
+html:after {
+	content: "";
+	background: url('./shitbg.png');
+	opacity: 0.6;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: absolute;
+}
+
+a {
 	text-decoration: none;
 	color: blue;
-}
-
-a:visited {
-	text-decoration: none;
-	color: purple;
 }
 
 a:hover {
-	color: blue;
+	color: cyan;
 }
 
-.left-element {
-	float: left;
-	width: 49%;
-}
-
-.right-element {
-	float: right;
-	width: 49%;
-	text-align: right;
-}
-
-.topMenu {
-	background-color:#397489;
-	font-weight:bold;
-	font-size:30px;
-	color:#ffffff;
-	padding:30px;
-	margin:15px;
+.top-menu, .bottom-menu {
+	background-color: #397489;
+	font-weight: 700;
+	font-size: 30px;
+	color: #fff;
+	padding: 30px;
+	margin: 15px;
+	min-height: 40px;
 }
 
 .menu {
-	background-color:#f0f0f0;
-	font-weight:bold;
-	margin:15px;
-	padding:10px;
+	background-color: #f0f0f0;
+	font-weight: 700;
+	margin: 15px;
+	padding: 10px;
 }
 
 .quote {
@@ -53,6 +48,11 @@ a:hover {
 	margin-bottom: 30px;
 	background-color: #fafafa;
 	border: 2px dashed #397489;
+}
+
+.quote-text {
+	display: block;
+	font-size: 18px;
 }
 
 .welcome-box {
