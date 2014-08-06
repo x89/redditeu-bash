@@ -107,7 +107,7 @@ class Controller
 		]);
 	}
 
-	public function addAction(array $data, $ip, $checkCaptcha)
+	public function addAction(array $data, $ip, $checkCaptcha, $captchaKey)
 	{
 		$valid = true;
 
@@ -138,8 +138,7 @@ class Controller
 		}
 
 		if ($checkCaptcha) {
-			$privatekey = "6Lc8Q8ESAAAAADAgiufKhG7J8vlTJnXMsHrAtOww";
-			$resp = recaptcha_check_answer($privatekey, $ip, $data["recaptcha_challenge_field"], $data["recaptcha_response_field"]);
+			$resp = recaptcha_check_answer($captchaKey, $ip, $data["recaptcha_challenge_field"], $data["recaptcha_response_field"]);
 
 			if (!$resp->is_valid) {
 				$this->app->msg = "The reCAPTCHA wasn't entered correctly. Try it again.";

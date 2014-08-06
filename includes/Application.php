@@ -75,7 +75,7 @@ class Application
 			$result = $this->controller->searchAction($_GET['search']);
 		} elseif (isset($_GET['add'])){
 			if (isset($_POST['submit'])) {
-				$result = $this->controller->addAction($_POST, $_SERVER['REMOTE_ADDR'], $this->enableCaptcha);
+				$result = $this->controller->addAction($_POST, $_SERVER['REMOTE_ADDR'], $this->enableCaptcha, $this->captchaKey);
 			} else {
 				$result = $this->controller->addFormAction($this->enableCaptcha);
 			}

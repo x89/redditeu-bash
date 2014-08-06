@@ -11,6 +11,7 @@ $config = [
 	'password'      => $credentials['password'],
 	'title'         => 'SCReddit QDB',
 	'enableCaptcha' => $credentials['enableCaptcha'],
+	'captchaKey'	=> $credentials['captchaKey'],
 	'latest'        => 10,
 	'top'           => 25,
 	'browsePP'      => 50,
