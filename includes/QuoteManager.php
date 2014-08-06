@@ -136,6 +136,13 @@ class QuoteManager
 
 	public function vote($ip, $quoteId, $voteIsPositive)
 	{
+		if (!$ip) {
+			throw new InvalidArgumentException();
+		}
+		if (!$quoteId) {
+			throw new InvalidArgumentException("Invalid quote ID: $quoteId");
+		}
+
 		$stmt = $this->pdo->prepare("SELECT COUNT(*) as count FROM bc_votes WHERE quote_id = :id AND ip = :ip");
 		$stmt->bindParam(':id', $quoteId);
 		$stmt->bindParam(':ip', $ip);

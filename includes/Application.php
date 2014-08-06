@@ -105,7 +105,7 @@ class Application
 	protected function getQuoteId($getParams)
 	{
 		$keys = array_keys($_GET);
-		return isset($_GET[0]) ? $_GET[0] : false;
+		return isset($keys[0]) ? $keys[0] : false;
 	}
 
 	public function template($name, array $data = array())
