@@ -197,6 +197,10 @@ class Controller
 		$this->json = true;
 		$quotes = $this->quotes->getAll();
 
+		array_walk($quotes, function(&$quote) {
+			$quote['quote'] = stripslashes($quote['quote']);
+		});
+
 		return json_encode($quotes);
 	}
 
