@@ -6,6 +6,7 @@ foreach (glob(__DIR__.'/includes/*.php') as $file) {
 
 $config = [
 	'rootDir'       => __DIR__,
+	'password'      => 'pissword',
 	'title'         => 'SCReddit QDB',
 	'enableCaptcha' => false,
 	'latest'        => 10,

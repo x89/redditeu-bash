@@ -107,12 +107,11 @@ class QuoteManager
 		$stmt->bindParam(':quote', $quote);
 		$stmt->execute();
 
-		return $this->pdo->getLastInsertId();
+		return $this->pdo->lastInsertId();
 	}
 
 	public function approve($id)
 	{
-		mysql_query("UPDATE bc_quotes SET active = 1 WHERE id = $quoteId");
 		$stmt = $this->pdo->prepare("UPDATE bc_quotes SET active = 1 WHERE id = :id");
 		$stmt->bindParam(':id', $id);
 		$stmt->execute();
@@ -152,7 +151,7 @@ class QuoteManager
 		$stmt->bindParam(':id', $quoteId);
 		$stmt->bindParam(':ip', $ip);
 		// '2' corresponds to +1 -- '1' corresponds to -1
-		$stmt->bindParam(':type', $voteIsPositive ? '2' : '1');
+		$stmt->bindValue(':type', $voteIsPositive ? '2' : '1');
 		$stmt->execute();
 
 		$popularityOperator = $voteIsPositive ? '+' : '-';

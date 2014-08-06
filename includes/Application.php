@@ -14,25 +14,32 @@ class Application
 	public $browsePP;
 	public $random;
 	public $search;
+	public $latest;
 
 	public function __construct(array $config)
 	{
-		$this->rootDir = $config['rootDir'];
-		$this->title = $config['title'];
-		$this->password = $config['password'];
-		$this->enableCaptcha = $config['enableCaptcha'];
-		$this->latest = $config['latest'];
-		$this->top = $config['top'];
-		$this->browsePP = $config['browsePP'];
-		$this->random = $config['random'];
-		$this->search = $config['search'];
+		$this->parseConfig($config);
+	}
+
+	public function parseConfig(array $config)
+	{
+		foreach ($config as $key => $value) {
+			if (property_exists($this, $key)) {
+				$this->$key = $value;
+			}
+		}
 	}
 
 	public function connectMysql($username, $password, $database)
 	{
 		$dsn = "mysql:host=localhost;dbname={$database}";
 		$this->pdo = new PDO($dsn, $username, $password, [
+			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+			PDO::ATTR_CASE               => PDO::CASE_NATURAL,
+			PDO::ATTR_ORACLE_NULLS       => PDO::NULL_NATURAL,
+			PDO::ATTR_STRINGIFY_FETCHES  => false,
+			PDO::ATTR_EMULATE_PREPARES   => false,
 		]);
 		$this->quotes = new QuoteManager($this->pdo);
 	}
@@ -49,7 +56,7 @@ class Application
 	public function run()
 	{
 		if (!isset($this->controller)) {
-			$this->controller = new Controller;
+			$this->controller = new Controller($this, $this->quotes);
 		}
 
 		if (isset($_GET['pass'])) {
@@ -87,12 +94,18 @@ class Application
 		} elseif (empty($_GET)){
 			$result = $this->controller->indexAction();
 		} elseif (isset($_GET['v'])) {
-			$result = $this->controller->voteAction($_GET, $_SERVER['REMOTE_ADDR'], $_GET['v']);
+			$result = $this->controller->voteAction($this->getQuoteId($_GET), $_SERVER['REMOTE_ADDR'], $_GET['v']);
 		} else {
-			$result = $this->controller->showQuoteAction($_GET[0]);
+			$result = $this->controller->showQuoteAction($this->getQuoteId($_GET));
 		}
 
 		echo $result;
+	}
+
+	protected function getQuoteId($getParams)
+	{
+		$keys = array_keys($_GET);
+		return isset($_GET[0]) ? $_GET[0] : false;
 	}
 
 	public function template($name, array $data = array())

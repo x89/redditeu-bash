@@ -61,6 +61,8 @@ class Controller
 
 		$total = $this->quotes->getActiveCount();
 
+		$pagesString = '';
+
 		for ($x = 0; $x < intval($total/$perPage)+1; $x++) {
 			$pagesString .= '<a href="?browse='.($x + 1).'">'.($x+1).'</a> - ';
 		}
@@ -83,6 +85,8 @@ class Controller
 		if (strlen($searchFor) < 1) {
 			return $this->indexAction();
 		}
+
+		$quotes = $this->quotes->getBySearch($searchFor, $this->app->search);
 
 		$form = '<br><form method="GET" action="'.$_SERVER['REQUEST_URI'].'">
 			Search for: <input type="text" name="search" value="'.htmlspecialchars($searchFor).'">
@@ -109,6 +113,7 @@ class Controller
 		$quote = (string) $data['quote'];
 
 		if (isset($data['strip']) && $data['strip'] == 'on') {
+			$quoteStripped = '';
 			$quoteSplode = explode('\n', $quote);
 			foreach ($quoteSplode as $line => $value){
 				$temp = strpos($value, '<');
@@ -146,7 +151,7 @@ class Controller
 			$this->app->msg = '<strong>Quote added as <a href="?'.$lastId.'">#'.$lastId.'</a>. Thanks for participating :-)</strong><br />';
 			return $this->indexAction();
 		} else {
-			return $this->addFormAction();
+			return $this->addFormAction($checkCaptcha);
 		}
 	}
 
@@ -162,7 +167,7 @@ class Controller
 
 	public function randomAction()
 	{
-		$quotes = $this->quotes->getRandom();
+		$quotes = $this->quotes->getRandom($this->app->random);
 
 		return $this->app->template('list', [
 			'quotes' => $quotes,
@@ -171,7 +176,7 @@ class Controller
 
 	public function topAction()
 	{
-		$quotes = $this->quotes->getTop();
+		$quotes = $this->quotes->getTop($this->app->top);
 
 		return $this->app->template('list', [
 			'quotes' => $quotes,
@@ -180,7 +185,7 @@ class Controller
 
 	public function latestAction()
 	{
-		$quotes = $this->quotes->getLatest();
+		$quotes = $this->quotes->getLatest($this->app->latest);
 
 		return $this->app->template('list', [
 			'quotes' => $quotes,
@@ -211,14 +216,14 @@ class Controller
 	public function voteAction($id, $ip, $vote)
 	{
 		$this->quotes->vote($ip, $id, $vote == 'rox');
-		$this->app->msg('Thanks for your vote!');
+		$this->app->msg = 'Thanks for your vote!';
 
 		return $this->indexAction();
 	}
 
 	public function showQuoteAction($id)
 	{
-		$quote = $this->quotes->getById($id);
+		$quote = $this->quotes->find($id);
 
 		if (!$quote) {
 			// redirect?
