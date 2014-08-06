@@ -1,5 +1,5 @@
 body, html {
-	font-family: Comic Sans MS;
+	font-family: "Comic Sans MS", sans-serif;
 	font-size: 18px;
 }
 
@@ -52,7 +52,7 @@ a:hover {
 
 .quote-text {
 	display: block;
-	font-family: "DejaVu Sans";
+	font-family: "DejaVu Sans", monospace;
 	font-size: 18px;
 }
 
