@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="menu">
-		<a href="bash.php">home</a> / 
+		<a href="/">home</a> / 
 		<a href="?latest">latest</a> / 
 		<a href="?browse">browse</a> / 
 		<a href="?random">random</a> / 
