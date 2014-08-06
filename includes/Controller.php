@@ -83,13 +83,13 @@ class Controller
 
 	public function searchAction($searchFor)
 	{
-		if (strlen($searchFor) < 1) {
-			return $this->indexAction();
+		if (strlen($searchFor) > 0) {
+			$quotes = $this->quotes->getBySearch($searchFor, $this->app->search);
+		} else {
+			$quotes = [];
 		}
 
-		$quotes = $this->quotes->getBySearch($searchFor, $this->app->search);
-
-		$form = '<br><form method="GET" action="'.$_SERVER['REQUEST_URI'].'">
+		$form = '<form method="GET" action="'.$_SERVER['REQUEST_URI'].'">
 			Search for: <input type="text" name="search" value="'.htmlspecialchars($searchFor).'">
 			<input type="submit" name="submit" value="Search">
 			</form>';

@@ -61,3 +61,9 @@ a:hover {
 	padding: 5px;
 	border: 1px dashed #333;
 }
+
+.search-form {
+	background-color: #f0f0f0;
+	margin: 15px;
+	padding: 10px;
+}
