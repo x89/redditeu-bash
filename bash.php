@@ -1,12 +1,14 @@
 <?php
 
+$credentials = require __DIR__.'/credentials.php';
+
 foreach (glob(__DIR__.'/includes/*.php') as $file) {
 	require_once $file;
 }
 
 $config = [
 	'rootDir'       => __DIR__,
-	'password'      => 'pissword',
+	'password'      => $credentials['password'],
 	'title'         => 'SCReddit QDB',
 	'enableCaptcha' => false,
 	'latest'        => 10,
@@ -18,6 +20,6 @@ $config = [
 
 $app = new Application($config);
 
-$app->connectMysql('bash', 'bash', 'bash');
+$app->connectMysql($credentials['mysqlUser'], $credentials['mysqlPass'], 'bash');
 
 $app->run();
