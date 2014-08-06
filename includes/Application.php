@@ -10,6 +10,7 @@ class Application
 	public $msg = '';
 	public $password;
 	public $enableCaptcha;
+	public $captchaKey;
 	public $top;
 	public $browsePP;
 	public $random;
