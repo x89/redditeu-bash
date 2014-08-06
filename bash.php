@@ -1,25 +1,23 @@
 <?php
 
-// MySQL details
 $MySQL['user'] = 'bash';	
 $MySQL['pass'] = 'bash';
 $MySQL['db'] = 'bash';
 
-$Password = 'pisswurd';					// Password for admin area. This is hardcoded and ISN'T majorly secure.
-$TheTitle = 'SCReddit QDB';			// The title of your site (displayed within <title> tags and at top of most pages.
-$RequireCaptcha = 0;				// If set to TRUE reCaptcha.net will be used to verify submissions as human.
+$Password = 'pisswurd';	
+$TheTitle = 'SCReddit QDB';
+$RequireCaptcha = 0;
 
-$Num['latest'] = 10;					// Number of latest quotes to show on latest
-$Num['top'] = 25;						// Number to show on top
-$Num['browsePP'] = 50;				// Number per page on browse
-$Num['random'] = 25;					// Number to show on random
-$Num['search'] = 25;					// Max number of results on search
+$Num['latest'] = 10;
+$Num['top'] = 25;
+$Num['browsePP'] = 50;
+$Num['random'] = 25;
+$Num['search'] = 25;
 
 mysql_connect('localhost', $MySQL['user'], $MySQL['pass']);
 mysql_select_db($MySQL['db']);
 
 function isAdmin(){
-
 	global $Password;
 	if (isset($_COOKIE['bc_login'])){
 		if (base64_decode($_COOKIE['bc_login']) == $Password){
@@ -33,128 +31,56 @@ function isAdmin(){
 }
 
 function smallMenu(){
-
-	$Menu = '<div class="menu" style="align:right"><a href="bash.php">home</a> / <a href="?latest">latest</a> / <a href="?browse">browse</a> / <a href="?random">random</a> / <a href="?add">add</a> / <a href="?top">top</a> / <a href="?search">search</a> / <a href="?chat">chat</a>';
-
+	$Menu = '<div class="menu"><a href="bash.php">home</a> / <a href="?latest">latest</a> / <a href="?browse">browse</a> / <a href="?random">random</a> / <a href="?add">add</a> / <a href="?top">top</a> / <a href="?search">search</a> / <a href="?chat">chat</a>';
 	if (isAdmin()){
 		$Menu.=' / <a href="?moderation">awaiting moderation</a> / <a href="?logout">logout</a>';
 	}
-
 	return $Menu.='</div>';
 }
 
-
-function start_page($Title='',$Msg=''){
+function start_page($Title='', $Msg='') {
 
 	global $TheTitle;
-	if ($Title==''){ $Title=$TheTitle; }
-	
-	echo <<<EOHTML
+	if ($Title == '') $Title = $TheTitle;
+	header('Content-type: text/html; charset=utf-8');	
+
+echo <<<__HEREDOC__
 <!DOCTYPE html>
 <html>
 <head>
-<style type="text/css" media="screen">
-	body, html{
-		background: url('http://hello.eboy.com/eboy/wp-content/uploads/shop/ECB_LA_28k.png'); /* This is a FUCKING joke. */
-		background-size: 100% auto;
-		background-repeat: repeat; background-color:black;
-		font-family: courier new,lucida console,fixed;
-	}
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="bash.css">
+	<title>$Title</title>
+	<script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+	<script type="text/javascript">
+		function ConfirmChoice(linkto){
+			if (confirm("Are you sure?")) 
+				location = linkto;
+		};
 
-	a:link {
-		text-decoration: none;
-		color: blue;
-	}
+		$(document).ready(function() {
+			$('.rox,.sux').click(function(){
+				var score = $(this).siblings('.score');
+				var ajaxhref = $(this).attr('href');
 
-	a:visited {
-		text-decoration: none;
-		color: purple;
-	}
-
-	a:hover {
-		text-decoration: blink;
-		color: blue;
-	}
-
-	.left-element {
-		float: left;
-		width: 49%;
-	}
-
-	.right-element {
-		float: right;
-		width: 49%;
-		text-align: right;
-	}
-
-	.topMenu {
-		background-color:#397489;
-		font-weight:bold;
-		font-size:30px;
-		color:#ffffff;
-		padding:30px;
-		margin:15px;
-	}
-
-	.menu{
-		background-color:#f0f0f0;
-		font-weight:bold;
-		margin:15px;
-		padding:10px;
-		left-padding:5px;
-	}
-
-	.quote{
-		padding: 8px;
-		margin: 15px;
-		font-size: 13px;
-		margin-bottom: 30px;
-		background-color: #fafafa;
-		border: 2px dashed #397489;
-	}
-
-	.welcome-box {
-		background-color: #ddd;
-		margin-left: 15px;
-		padding: 5px;
-		border: 1px dashed #333;
-	}
-</style>
-<title>$Title</title>
-<script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"></script>
-<script type="text/javascript">
-	/* <![CDATA[ */
-	function ConfirmChoice(linkto){
-		if (confirm("Are you sure?")) 
-			location = linkto;
-	};
-
-	$(document).ready(function() {
-		$('.rox,.sux').click(function(){
-			var score = $(this).siblings('.score');
-			var ajaxhref = $(this).attr('href');
-
-			$.ajax({
-				url: ajaxhref,
-				success: function(data, textStatus) {
-					score.load(ajaxhref.split('&v',1)[0]+' .score').fadeIn("slow");
-				}
+				$.ajax({
+					url: ajaxhref,
+					success: function(data, textStatus) {
+						score.load(ajaxhref.split('&v',1)[0]+' .score').fadeIn("slow");
+					}
+				});
 			});
 		});
-	});
-	/* ]]> */
-</script>
+	</script>
 </head>
 <body>
 <div class="topMenu">$Title</div>
-EOHTML;
+__HEREDOC__;
 
 	echo smallMenu();
-
-	if ($Msg){ echo '<br/><div class="welcome-box">'.$Msg.'</div>'; }
+	if ($Msg) { echo '<br><div class="welcome-box">'.$Msg.'</div>'; }
 
 }
-
 
 function show_quote($Quote,$ShowTime=FALSE){
 
@@ -168,29 +94,27 @@ function show_quote($Quote,$ShowTime=FALSE){
 	}
 
 	if ($Quote){
-		echo '<div class="quote"><a href="?'.$Quote['id'].'">#'.$Quote['id'].'</a> <span class="score">('.$Quote['popularity'].')</span> '.($ShowTime!=FALSE ? date('jS/M/Y',$Quote['timestamp']) : '').' <a class="rox" href="?'.$Quote['id'].'&amp;v=rox">[+]</a><a class="sux" href="?'.$Quote['id'].'&amp;v=sux">[-]</a>'.$del.$approve.'<br/><span class="quote-text">'.nl2br(htmlspecialchars(stripslashes($Quote['quote']))).'</span></div>';
+		echo '<div class="quote"><a href="?'.$Quote['id'].'">#'.$Quote['id'].'</a> <span class="score">('.$Quote['popularity'].')</span> '.($ShowTime!=FALSE ? date('jS/M/Y',$Quote['timestamp']) : '').' <a class="rox" href="?'.$Quote['id'].'&amp;v=rox">[+]</a><a class="sux" href="?'.$Quote['id'].'&amp;v=sux">[-]</a>'.$del.$approve.'<br><span class="quote-text">'.nl2br(htmlspecialchars(stripslashes($Quote['quote']))).'</span></div>';
 	} else {
 		echo 'Quote not found or doesn\'t exist yet.';
 	}
-
 }
 
 if (isset($_GET['pass'])){
 
 	if ($_GET['pass']==$Password){
 		setcookie('bc_login',base64_encode($_GET['pass']),time()+60*60*24*90); // 90 days
-		start_page($TheTitle.' - Logged In','Vilkommen administrator, you are now logged in and can browse to delete quotes.<br/><br/>');
+		start_page($TheTitle.' - Logged In','Vilkommen administrator, you are now logged in and can browse to delete quotes.<br><br>');
 	}
 
 } elseif (isset($_GET['chat'])){
-		start_page($TheTitle.' - Chitty Chatty','<iframe src="http://kiwiirc.com/client/irc.quakenet.org/redditeu/?nick=webber|?" style="border:0; width:100%; height:450px;"></iframe><br /><strong>irc.quakenet.org #redditeu</strong><br/><br/>');
+	start_page($TheTitle.' - Chitty Chatty','<iframe src="http://kiwiirc.com/client/irc.quakenet.org/redditeu/?nick=webber|?" style="border:0; width:100%; height:450px;"></iframe><br /><strong>irc.quakenet.org #redditeu</strong><br><br>');
 
 } elseif (isset($_GET['logout'])){
 
 	setcookie('bc_login','',time()-3600);
 	start_page($TheTitle.' - Logged out','You have been logged out. Cheerio!');
 	echo '</body></html>';
-
 
 } elseif (isset($_GET['del'])){
 
@@ -225,7 +149,7 @@ if (isset($_GET['pass'])){
 		$pagesString.='<a href="?browse='.($x+1).'">'.($x+1).'</a> - ';
 	}
 
-	echo '<br/>'.substr($pagesString,0,-3).'<br/><br/>';
+	echo '<br>'.substr($pagesString,0,-3).'<br><br/>';
 
 	$Start = $page*$NumPP;
 	$End = $page+$NumPP;
@@ -248,29 +172,28 @@ if (isset($_GET['pass'])){
 		$searchQuery = mysql_real_escape_string($_GET['search']);
 	}
 
-	echo '<br/><form method="GET" action="'.$_SERVER['REQUEST_URI'].'">
-	Search for: <input type="text" name="search" value="'.htmlspecialchars($searchQuery).'">
-	<input type="submit" name="submit" value="Search">
-	</form>';
+	echo '<br><form method="GET" action="'.$_SERVER['REQUEST_URI'].'">
+		Search for: <input type="text" name="search" value="'.htmlspecialchars($searchQuery).'">
+		<input type="submit" name="submit" value="Search">
+		</form>';
 
-	if (strlen($_GET['search'])>0){
-		$getSearch = mysql_query("SELECT * FROM bc_quotes WHERE active = 1 AND quote LIKE '%$searchQuery%' LIMIT {$Num['search']}");
+if (strlen($_GET['search'])>0){
+	$getSearch = mysql_query("SELECT * FROM bc_quotes WHERE active = 1 AND quote LIKE '%$searchQuery%' LIMIT {$Num['search']}");
 
-		if (@mysql_num_rows($getSearch) > 0){
-			while ($Search = mysql_fetch_assoc($getSearch)){
-				show_quote($Search);
-			}
+	if (@mysql_num_rows($getSearch) > 0){
+		while ($Search = mysql_fetch_assoc($getSearch)){
+			show_quote($Search);
+		}
 
-			echo '<form method="GET" action="'.$_SERVER['REQUEST_URI'].'">
+		echo '<form method="GET" action="'.$_SERVER['REQUEST_URI'].'">
 			Search for: <input type="text" name="search" value="'.htmlspecialchars($searchQuery).'">
 			<input type="submit" name="submit" value="Search">
 			</form>';
 
-		} else {
-			echo 'No results found homeslice.';
-		}
+	} else {
+		echo 'No results found homeslice.';
 	}
-
+}
 
 } elseif (isset($_GET['add'])){
 
@@ -283,9 +206,9 @@ if (isset($_GET['pass'])){
 		if ($RequireCaptcha){
 			$privatekey = "6Lc8Q8ESAAAAADAgiufKhG7J8vlTJnXMsHrAtOww";
 			$resp = recaptcha_check_answer ($privatekey,$_SERVER["REMOTE_ADDR"],$_POST["recaptcha_challenge_field"],$_POST["recaptcha_response_field"]);
-	
+
 			if (!$resp->is_valid) {
-				$Msg="<strong>The reCAPTCHA wasn't entered correctly. Try it again.</strong><br/>";
+				$Msg="<strong>The reCAPTCHA wasn't entered correctly. Try it again.</strong><br>";
 			}
 		}
 
@@ -298,7 +221,7 @@ if (isset($_GET['pass'])){
 				$quoteSplode=explode('\n',$quote);
 				foreach($quoteSplode as $Line => $Value){
 					$temp=strpos($Value,'<');
-	
+
 					if ($temp===FALSE){
 						$quoteStripped.=$Value;
 					} else {
@@ -320,21 +243,19 @@ if (isset($_GET['pass'])){
 
 	start_page($TheTitle.' - Add',$Msg);
 
-
-	echo '<br/><form style="background-color:#CCC;margin:10px;padding:10px;border:1px solid #333;" method="POST" action="'.$_SERVER['REQUEST_URI'].'">
-	<textarea name="quote" maxlength="3000" style="width:700px;height:300px;">'.stripslashes($_POST['quote']).'</textarea><br/>
-	Attempt to strip timestamps? <input type="checkbox" name="strip" checked="checked"><br /><br />';
+	echo '<br><form style="background-color:#CCC;margin:10px;padding:10px;border:1px solid #333;" method="POST" action="'.$_SERVER['REQUEST_URI'].'">
+		<textarea name="quote" maxlength="3000" style="width:700px;height:300px;">'.stripslashes($_POST['quote']).'</textarea><br>
+		Attempt to strip timestamps? <input type="checkbox" name="strip" checked="checked"><br /><br />';
 
 	if ($RequireCaptcha){
 		$publickey = "6Lc8Q8ESAAAAAB8ZgZFKotSQ5dJQ7-IWVoYeTKlE"; // you got this from the signup page
 		echo recaptcha_get_html($publickey);
 	}
 
-	echo '<br/><input type="submit" name="submit" value="Submit Quote"> <input type="reset" name="reset" value="Reset">
-	</form>';
+	echo '<br><input type="submit" name="submit" value="Submit Quote"> <input type="reset" name="reset" value="Reset">
+		</form>';
 
-
-}elseif (isset($_GET['approve'])){
+} elseif (isset($_GET['approve'])){
 
 	if (isAdmin()){
 		$quoteId=intval(mysql_real_escape_string($_GET['approve']));
@@ -379,7 +300,7 @@ if (isset($_GET['pass'])){
 	}
 
 } elseif (isset($_GET['json'])){
-	
+
 	header('Content-type: application/json');
 	$all_quotes = mysql_query("SELECT id, quote, popularity FROM bc_quotes ORDER BY id");
 	if (!$all_quotes) {
@@ -421,7 +342,6 @@ if (isset($_GET['pass'])){
 		show_quote($row);
 	}
 
-
 } else {
 	// Display a Single Quote
 
@@ -441,7 +361,7 @@ if (isset($_GET['pass'])){
 				mysql_query("UPDATE bc_quotes SET popularity = popularity - 1 WHERE id = $quoteId") or die(mysql_error());
 			}
 
-			start_page($TheTitle.' - Voted','Thanks for your vote.<br/><br/>');
+			start_page($TheTitle.' - Voted','Thanks for your vote.<br><br>');
 
 		} elseif ($_GET['v'] == 'rox'){
 
@@ -454,8 +374,7 @@ if (isset($_GET['pass'])){
 				mysql_query("UPDATE bc_quotes SET popularity = popularity + 1 WHERE id = $quoteId") or die(mysql_error());
 			}
 
-
-			start_page($TheTitle.' - Voted','Thank you for your vote!<br/><br/>');
+			start_page($TheTitle.' - Voted','Thank you for your vote!<br><br>');
 
 		} else {
 
@@ -489,14 +408,15 @@ if (!isset($_GET['json'])) {
 	if ($Pending < 1){
 		$Pending = 0;
 	}
-	echo smallMenu().'<div class="topMenu">
-
-	  <div class="left-element">
-	  '.$Approved.' quotes approved; '.$Pending.' quotes pending
-	  </div>
-	.
-
+	echo smallMenu();
+echo <<<__HEREDOC__
+<div class="topMenu">
+	<div class="left-element">
+		$Approved quotes approved; $Pending quotes pending
 	</div>
-	</body></html>';
+</div>
+</body>
+</html>
+__HEREDOC__;
 }
 ?>

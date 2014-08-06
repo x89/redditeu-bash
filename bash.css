@@ -1,0 +1,63 @@
+body, html {
+	background: url('./shitbg.png');
+	background-size: 100% auto;
+	background-repeat: repeat; background-color:black;
+	font-family: courier new,lucida console,fixed;
+}
+
+a:link {
+	text-decoration: none;
+	color: blue;
+}
+
+a:visited {
+	text-decoration: none;
+	color: purple;
+}
+
+a:hover {
+	color: blue;
+}
+
+.left-element {
+	float: left;
+	width: 49%;
+}
+
+.right-element {
+	float: right;
+	width: 49%;
+	text-align: right;
+}
+
+.topMenu {
+	background-color:#397489;
+	font-weight:bold;
+	font-size:30px;
+	color:#ffffff;
+	padding:30px;
+	margin:15px;
+}
+
+.menu {
+	background-color:#f0f0f0;
+	font-weight:bold;
+	margin:15px;
+	padding:10px;
+}
+
+.quote {
+	padding: 8px;
+	margin: 15px;
+	font-size: 13px;
+	margin-bottom: 30px;
+	background-color: #fafafa;
+	border: 2px dashed #397489;
+}
+
+.welcome-box {
+	background-color: #ddd;
+	margin-left: 15px;
+	padding: 5px;
+	border: 1px dashed #333;
+}
