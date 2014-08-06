@@ -19,7 +19,7 @@ class QuoteManager
 
 	public function getAll()
 	{
-		$stmt = $this->pdo->prepare("SELECT id, quote, popularity FROM bc_quotes");
+		$stmt = $this->pdo->prepare("SELECT id, quote, popularity, timestamp FROM bc_quotes");
 		$stmt->execute();
 
 		return $stmt->fetchAll();
