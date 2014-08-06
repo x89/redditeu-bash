@@ -234,7 +234,9 @@ class Controller
 			$this->app->msg = 'Quote pending approval';
 		}
 
-		return $this->app->template('single', ['quote' => $quote]);
+		return $this->app->template('single', [
+			'quote' => $quote,
+		]);
 	}
 
 	public function sendResponse($body)
