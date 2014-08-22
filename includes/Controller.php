@@ -18,7 +18,11 @@ class Controller
 			$this->app->msg = 'Vilkommen administrator, you are now logged in and can browse to delete quotes.<br><br>';
 		}
 
-		return $this->indexAction();
+		// get the url without query string
+		$url = strtok($_SERVER["REQUEST_URI"], '?');
+		header('HTTP/1.0 302 Found');
+		header('Location: ' . $url);
+		return 'Redirecting to ' . $url;
 	}
 
 	public function chatAction()
@@ -223,7 +227,7 @@ class Controller
 		$this->quotes->vote($ip, $id, $vote == 'rox');
 		$this->app->msg = 'Thanks for your vote!';
 
-		return $this->indexAction();
+		return $this->showQuoteAction($id);
 	}
 
 	public function showQuoteAction($id)
