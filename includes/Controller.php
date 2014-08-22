@@ -14,8 +14,9 @@ class Controller
 	public function loginAction($password)
 	{
 		if ($password == $this->app->password) {
-			setcookie('bc_login', base64_encode($password), time() + 60 * 60 * 24 * 90); // 90 days
-			$this->app->msg = 'Vilkommen administrator, you are now logged in and can browse to delete quotes.<br><br>';
+			$days = 90;
+			$expires = time() + 60 * 60 * 24 * $days;
+			setcookie('bc_login', base64_encode($password), $expires);
 		}
 
 		// get the url without query string
@@ -33,9 +34,10 @@ class Controller
 	public function logoutAction()
 	{
 		setcookie('bc_login', '', time() - 3600);
-		$this->app->msg = 'You have been logged out. Cheerio!';
 
-		return $this->indexAction();
+		header('HTTP/1.0 302 Found');
+		header('Location: ' . $url);
+		return 'Redirecting to ' . $url;
 	}
 
 	public function deleteAction($id)
