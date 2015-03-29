@@ -73,7 +73,7 @@ class QuoteManager
 
 	public function getRandom($limit)
 	{
-		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true ORDER BY RAND() LIMIT :limit");
+		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true ORDER BY RANDOM() LIMIT :limit");
 		$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
 		$stmt->execute();
 		
