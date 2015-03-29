@@ -108,7 +108,7 @@ class QuoteManager
 		$stmt->bindParam(':quote', $quote);
 		$stmt->execute();
 
-		return $this->pdo->lastInsertId();
+		return $this->pdo->lastInsertId('bc_quotes_id_seq');
 	}
 
 	public function approve($id)
