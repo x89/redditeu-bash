@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "bc_quotes" (
 	"ip" varchar(255),
 	"quote" text NOT NULL,
 	"active" boolean NOT NULL,
-	"popularity" integer NOT NULL
+	"popularity" integer DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS "bc_votes" (
