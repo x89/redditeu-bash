@@ -77,7 +77,7 @@ class Controller
 		$pagesString = substr($pagesString,0,-3);
 
 		$start = $page * $perPage;
-		$end = $page + $perPage;
+		$end = $start + $perPage;
 
 		$quotes = $this->quotes->getActive($start, $end);
 

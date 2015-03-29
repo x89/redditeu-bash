@@ -27,9 +27,10 @@ class QuoteManager
 
 	public function getActive($start, $end)
 	{
-		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = 1 ORDER BY id ASC LIMIT :start, :end");
+		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true ORDER BY id ASC OFFSET :start LIMIT :limit");
+		$limit = $end - $start;
 		$stmt->bindParam(':start', $start, PDO::PARAM_INT);
-		$stmt->bindParam(':end', $end, PDO::PARAM_INT);
+		$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
 		$stmt->execute();
 
 		return $stmt->fetchAll();
@@ -37,7 +38,7 @@ class QuoteManager
 
 	public function getPending()
 	{
-		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = 0 ORDER BY id ASC LIMIT 100");
+		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = false ORDER BY id ASC LIMIT 100");
 		$stmt->execute();
 
 		return $stmt->fetchAll();
@@ -45,7 +46,7 @@ class QuoteManager
 
 	public function getBySearch($searchFor, $limit)
 	{
-		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = 1 AND quote LIKE :search ORDER BY id ASC LIMIT :limit");
+		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true AND quote LIKE :search ORDER BY id ASC LIMIT :limit");
 		$stmt->bindValue(':search', "%{$searchFor}%");
 		$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
 		$stmt->execute();
@@ -55,7 +56,7 @@ class QuoteManager
 
 	public function getTop($limit)
 	{
-		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = 1 ORDER BY popularity DESC LIMIT :limit");
+		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true ORDER BY popularity DESC LIMIT :limit");
 		$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
 		$stmt->execute();
 
@@ -64,7 +65,7 @@ class QuoteManager
 
 	public function getLatest($limit)
 	{
-		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = 1 ORDER BY timestamp DESC LIMIT :limit");
+		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true ORDER BY timestamp DESC LIMIT :limit");
 		$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
 		$stmt->execute();
 
@@ -73,7 +74,7 @@ class QuoteManager
 
 	public function getRandom($limit)
 	{
-		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = 1 ORDER BY RAND() LIMIT :limit");
+		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true ORDER BY RANDOM() LIMIT :limit");
 		$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
 		$stmt->execute();
 		
@@ -82,7 +83,7 @@ class QuoteManager
 
 	public function getActiveCount()
 	{
-		$stmt = $this->pdo->prepare("SELECT COUNT(*) as count FROM bc_quotes WHERE active = 1");
+		$stmt = $this->pdo->prepare("SELECT COUNT(*) as count FROM bc_quotes WHERE active = true");
 		$stmt->execute();
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -91,7 +92,7 @@ class QuoteManager
 
 	public function getPendingCount()
 	{
-		$stmt = $this->pdo->prepare("SELECT COUNT(*) as count FROM bc_quotes WHERE active = 0");
+		$stmt = $this->pdo->prepare("SELECT COUNT(*) as count FROM bc_quotes WHERE active = false");
 		$stmt->execute();
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -101,36 +102,36 @@ class QuoteManager
 	public function add($ip, $quote)
 	{
 		$timestamp = time();
-		$stmt = $this->pdo->prepare("INSERT INTO bc_quotes (timestamp, ip, quote, active) VALUES(:timestamp, :ip, :quote, 0)");
+		$stmt = $this->pdo->prepare("INSERT INTO bc_quotes (timestamp, ip, quote, active) VALUES(:timestamp, :ip, :quote, false)");
 		$stmt->bindParam(':timestamp', $timestamp);
 		$stmt->bindParam(':ip', $ip);
 		$stmt->bindParam(':quote', $quote);
 		$stmt->execute();
 
-		return $this->pdo->lastInsertId();
+		return $this->pdo->lastInsertId('bc_quotes_id_seq');
 	}
 
 	public function approve($id)
 	{
-		$stmt = $this->pdo->prepare("UPDATE bc_quotes SET active = 1 WHERE id = :id");
+		$stmt = $this->pdo->prepare("UPDATE bc_quotes SET active = true WHERE id = :id");
 		$stmt->bindParam(':id', $id);
 		$stmt->execute();
 	}
 
 	public function delete($id)
 	{
-		$stmt = $this->pdo->prepare("DELETE FROM bc_quotes WHERE id = :id LIMIT 1");
+		$stmt = $this->pdo->prepare("DELETE FROM bc_quotes WHERE id = :id");
 		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
 		$stmt->execute();
 
-		$stmt = $this->pdo->prepare("DELETE FROM bc_votes WHERE quote_id = :id LIMIT 1");
+		$stmt = $this->pdo->prepare("DELETE FROM bc_votes WHERE quote_id = :id");
 		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
 		$stmt->execute();
 	}
 
 	public function deleteAll()
 	{
-		$stmt = $this->pdo->prepare("DELETE FROM bc_quotes WHERE active = 0");
+		$stmt = $this->pdo->prepare("DELETE FROM bc_quotes WHERE active = false");
 		$stmt->execute();
 	}
 
