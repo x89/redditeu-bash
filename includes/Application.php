@@ -47,7 +47,7 @@ class Application
 
 	public function connectPostgres($username, $password, $database)
 	{
-		$dsn = "postgres:host=localhost;dbname={$database}";
+		$dsn = "pgsql:host=localhost;dbname={$database}";
 		$this->pdo = new PDO($dsn, $username, $password, [
 			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
