@@ -21,6 +21,6 @@ $config = [
 
 $app = new Application($config);
 
-$app->connectMysql($credentials['mysqlUser'], $credentials['mysqlPass'], 'bash');
+$app->connectPostgres($credentials['pgUser'], $credentials['pgPass'], 'qdb');
 
 $app->run();

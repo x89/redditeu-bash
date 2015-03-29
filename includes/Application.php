@@ -45,6 +45,20 @@ class Application
 		$this->quotes = new QuoteManager($this->pdo);
 	}
 
+	public function connectPostgres($username, $password, $database)
+	{
+		$dsn = "postgres:host=localhost;dbname={$database}";
+		$this->pdo = new PDO($dsn, $username, $password, [
+			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+			PDO::ATTR_CASE               => PDO::CASE_NATURAL,
+			PDO::ATTR_ORACLE_NULLS       => PDO::NULL_NATURAL,
+			PDO::ATTR_STRINGIFY_FETCHES  => false,
+			PDO::ATTR_EMULATE_PREPARES   => false,
+		]);
+		$this->quotes = new QuoteManager($this->pdo);
+	}
+
 	public function userIsAdmin()
 	{
 		if (isset($_COOKIE['bc_login']) && base64_decode($_COOKIE['bc_login']) === $this->password){
