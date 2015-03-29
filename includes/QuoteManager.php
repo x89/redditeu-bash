@@ -120,11 +120,11 @@ class QuoteManager
 
 	public function delete($id)
 	{
-		$stmt = $this->pdo->prepare("DELETE FROM bc_quotes WHERE id = :id LIMIT 1");
+		$stmt = $this->pdo->prepare("DELETE FROM bc_quotes WHERE id = :id");
 		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
 		$stmt->execute();
 
-		$stmt = $this->pdo->prepare("DELETE FROM bc_votes WHERE quote_id = :id LIMIT 1");
+		$stmt = $this->pdo->prepare("DELETE FROM bc_votes WHERE quote_id = :id");
 		$stmt->bindParam(':id', $id, PDO::PARAM_INT);
 		$stmt->execute();
 	}
