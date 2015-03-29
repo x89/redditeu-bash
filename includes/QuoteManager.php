@@ -27,9 +27,9 @@ class QuoteManager
 
 	public function getActive($start, $end)
 	{
-		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true ORDER BY id ASC LIMIT :start, :end");
+		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true ORDER BY id ASC OFFSET :start LIMIT :limit");
 		$stmt->bindParam(':start', $start, PDO::PARAM_INT);
-		$stmt->bindParam(':end', $end, PDO::PARAM_INT);
+		$stmt->bindParam(':limit', $end - $start, PDO::PARAM_INT);
 		$stmt->execute();
 
 		return $stmt->fetchAll();
