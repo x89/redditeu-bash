@@ -46,7 +46,7 @@ class QuoteManager
 
 	public function getBySearch($searchFor, $limit)
 	{
-		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true AND quote LIKE :search ORDER BY id ASC LIMIT :limit");
+		$stmt = $this->pdo->prepare("SELECT * FROM bc_quotes WHERE active = true AND quote ILIKE :search ORDER BY id ASC LIMIT :limit");
 		$stmt->bindValue(':search', "%{$searchFor}%");
 		$stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
 		$stmt->execute();
