@@ -28,6 +28,12 @@ def find_quote_info(quote):
 
 	text = text.replace("'", "\\'")
 	text = text.replace("\n", "\\n")
+	text = text.replace('â€™', "\\'")
+	text = text.replace('â€œ', '"')
+	text = text.replace('â€”', '*')
+	text = text.replace('â€', '"')
+	text = text.replace('Â«', '«')
+	text = text.replace('Â»', '»')
 	text = "E'"+text+"'"
 
 	print("INSERT INTO bc_quotes (\"quote\", \"timestamp\", \"popularity\", \"active\")",
